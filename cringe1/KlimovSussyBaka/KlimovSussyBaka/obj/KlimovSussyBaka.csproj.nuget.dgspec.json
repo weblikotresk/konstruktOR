@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\space\\OneDrive\\One-click Uni\\языки\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj": {}
+    "C:\\Users\\andre\\Source\\Repos\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj": {}
   },
   "projects": {
-    "C:\\Users\\space\\OneDrive\\One-click Uni\\языки\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj": {
+    "C:\\Users\\andre\\Source\\Repos\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\space\\OneDrive\\One-click Uni\\языки\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj",
+        "projectUniqueName": "C:\\Users\\andre\\Source\\Repos\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj",
         "projectName": "KlimovSussyBaka",
-        "projectPath": "C:\\Users\\space\\OneDrive\\One-click Uni\\языки\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj",
-        "packagesPath": "C:\\Users\\space\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\space\\OneDrive\\One-click Uni\\языки\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\obj\\",
+        "projectPath": "C:\\Users\\andre\\Source\\Repos\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\KlimovSussyBaka.csproj",
+        "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\andre\\Source\\Repos\\konstruktOR\\cringe1\\KlimovSussyBaka\\KlimovSussyBaka\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\space\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
