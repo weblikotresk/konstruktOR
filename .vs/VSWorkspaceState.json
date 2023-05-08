@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Checkers",
+    "\\Checkers\\Checkers",
+    "\\Checkers\\Checkers\\bin",
+    "\\Checkers\\Checkers\\bin\\Debug",
+    "\\Checkers\\Checkers\\obj",
+    "\\Checkers\\Checkers\\obj\\Debug"
   ],
-  "SelectedNode": "\\C:\\Users\\space\\OneDrive\\One-click Uni\\языки\\konstruktOR",
+  "SelectedNode": "\\Checkers\\Checkers\\MainWindow.xaml",
   "PreviewInSolutionExplorer": false
 }
