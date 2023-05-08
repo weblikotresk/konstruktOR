@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Checkers",
+    "\\Checkers\\Checkers",
+    "\\Checkers\\Checkers\\bin",
+    "\\Checkers\\Checkers\\bin\\Debug",
+    "\\Checkers\\Checkers\\obj",
+    "\\Checkers\\Checkers\\obj\\Debug"
   ],
-  "SelectedNode": "\\KlimovSussyBaka.sln",
+
+  "SelectedNode": "\\Checkers\\Checkers\\MainWindow.xaml",
+
+
   "PreviewInSolutionExplorer": false
 }
