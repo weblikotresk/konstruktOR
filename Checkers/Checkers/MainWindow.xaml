@@ -6,7 +6,86 @@
         xmlns:local="clr-namespace:Checkers"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="0,55,0,39" HorizontalAlignment="Center" Width="366">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Column ="0" Grid.RowSpan="8" Background="#000"/>
+        <Border Grid.Column ="1" Grid.RowSpan="8" Background="#000"/>
+        <Border Grid.Column ="2" Grid.RowSpan="8" Background="#000"/>
+        <Border Grid.Column ="3" Grid.RowSpan="8" Background="#000"/>
+        <Border Grid.Column ="4" Grid.RowSpan="8" Background="#000"/>
+        <Border Grid.Column ="5" Grid.RowSpan="8" Background="#000"/>
+        <Border Grid.Column ="6" Grid.RowSpan="8" Background="#000"/>
+        <Border Grid.Column ="7" Grid.RowSpan="8" Background="#000"/>
+
+        <Border Grid.Column ="0" Grid.Row="0" Background="#fff"/>
+        <Border Grid.Column ="1" Grid.Row="1" Background="#fff"/>
+        <Border Grid.Column ="2" Grid.Row="2" Background="#fff"/>
+        <Border Grid.Column ="3" Grid.Row="3" Background="#fff"/>
+        <Border Grid.Column ="4" Grid.Row="4" Background="#fff"/>
+        <Border Grid.Column ="5" Grid.Row="5" Background="#fff"/>
+        <Border Grid.Column ="6" Grid.Row="6" Background="#fff"/>
+        <Border Grid.Column ="7" Grid.Row="7" Background="#fff"/>
+
+        <Border Grid.Column ="0" Grid.Row="2" Background="#fff"/>
+        <Border Grid.Column ="1" Grid.Row="3" Background="#fff"/>
+        <Border Grid.Column ="2" Grid.Row="4" Background="#fff"/>
+        <Border Grid.Column ="3" Grid.Row="5" Background="#fff"/>
+        <Border Grid.Column ="4" Grid.Row="6" Background="#fff"/>
+        <Border Grid.Column ="5" Grid.Row="7" Background="#fff"/>
+
+        <Border Grid.Column ="0" Grid.Row="4" Background="#fff"/>
+        <Border Grid.Column ="1" Grid.Row="5" Background="#fff"/>
+        <Border Grid.Column ="2" Grid.Row="6" Background="#fff"/>
+        <Border Grid.Column ="3" Grid.Row="7" Background="#fff"/>
+
+
+        <Border Grid.Column ="0" Grid.Row="6" Background="#fff"/>
+        <Border Grid.Column ="1" Grid.Row="7" Background="#fff"/>
+
+
+
+        <Border Grid.Column ="2" Grid.Row="0" Background="#fff"/>
+        <Border Grid.Column ="3" Grid.Row="1" Background="#fff"/>
+        <Border Grid.Column ="4" Grid.Row="2" Background="#fff"/>
+        <Border Grid.Column ="5" Grid.Row="3" Background="#fff"/>
+        <Border Grid.Column ="6" Grid.Row="4" Background="#fff"/>
+        <Border Grid.Column ="7" Grid.Row="5" Background="#fff"/>
+
+        <Border Grid.Column ="4" Grid.Row="0" Background="#fff"/>
+        <Border Grid.Column ="5" Grid.Row="1" Background="#fff"/>
+        <Border Grid.Column ="6" Grid.Row="2" Background="#fff"/>
+        <Border Grid.Column ="7" Grid.Row="3" Background="#fff"/>
+
+
+
+        <Border Grid.Column ="6" Grid.Row="0" Background="#fff"/>
+        <Border Grid.Column ="7" Grid.Row="1" Background="#fff"/>
+
+<!--пока так, потом нужно попробовать автоматически их как-то заполнять через цикл из .xaml.cs -->
+
+
+
+
+
     </Grid>
 </Window>
