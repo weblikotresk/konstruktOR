@@ -1,0 +1,16 @@
+D:\kursova\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.exe.config
+D:\kursova\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.exe
+D:\kursova\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.pdb
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.AssemblyReference.cache
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.SuggestedBindingRedirects.cache
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\MainWindow.g.cs
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\App.g.cs
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.cache
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.lref
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\MainWindow.baml
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.g.resources
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.Properties.Resources.resources
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.GenerateResource.cache
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.exe
+D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.pdb
