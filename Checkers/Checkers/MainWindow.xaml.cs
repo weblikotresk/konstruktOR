@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Drawing;
+using static Checkers.MainWindow;
+using Image = System.Windows.Controls.Image;
 
 namespace Checkers
 {
@@ -66,6 +68,7 @@ namespace Checkers
             RowDefinition rowDef6 = new RowDefinition();
             RowDefinition rowDef7 = new RowDefinition();
             RowDefinition rowDef8 = new RowDefinition();
+            RowDefinition rowDef9 = new RowDefinition();
             myGrid.RowDefinitions.Add(rowDef1);
             myGrid.RowDefinitions.Add(rowDef2);
             myGrid.RowDefinitions.Add(rowDef3);
@@ -74,9 +77,83 @@ namespace Checkers
             myGrid.RowDefinitions.Add(rowDef6);
             myGrid.RowDefinitions.Add(rowDef7);
             myGrid.RowDefinitions.Add(rowDef8);
+            myGrid.RowDefinitions.Add(rowDef9);
             //написан кринж, переработать для оптимизации
+<<<<<<< Updated upstream
 
             
+=======
+            //create the black-n-white chess grid with buttons as grid childrens
+            BitmapImage whiteCheckersBitmap = new BitmapImage
+                (new Uri("images/white.png", UriKind.Relative));
+            BitmapImage blackCheckersBitmap = new BitmapImage
+                (new Uri("images/black.png", UriKind.Relative));
+
+          
+            for (short i = 0; i < 8; i++)
+            {
+                for (short j = 0; j < 8; j++)
+                {
+                    //backButton is interactive clickable button
+                    //checkersIcon is an image hovering above buttons, is static and non-interactive with the user
+                    Button backButton = new Button();
+
+                    if ((i + j) % 2 == 0)
+                    {
+                        backButton.Background = System.Windows.Media.Brushes.White; //<-- initially this was made for color of the cell, temporarily is used rn for checkers pieces test
+                    
+                    }
+                    else
+                    {
+                        backButton.Background = System.Windows.Media.Brushes.Black;
+
+                        if (i < 3)
+                        {//working over here -----------------------------------------------------------------------------
+                            Image whiteCheckers = new Image();
+                            whiteCheckers.Width = 200;
+                            whiteCheckers.Source = whiteCheckersBitmap;
+                            myGrid.Children.Add(whiteCheckers);
+                            Grid.SetColumn(whiteCheckers, j);
+                            Grid.SetRow(whiteCheckers, i);
+                        }
+                        else if(i>5)
+                        {
+                            Image blackCheckers = new Image();
+
+                            blackCheckers.Source = blackCheckersBitmap;
+                            //myGrid.Children.Add(blackCheckers);
+                            //Grid.SetColumn(blackCheckers, j);
+                            //Grid.SetRow(blackCheckers, i);
+                        }
+                    }
+                    myGrid.Children.Add(backButton);
+                    Grid.SetColumn(backButton, j);
+                    Grid.SetRow(backButton, i);
+                }
+            }
+            mainWindow.Content = myGrid;
+        }
+        public enum Pieces
+        {
+                WhitePiece,
+                BlackPiece,
+                WhiteKing,
+                BlackKing
+        }
+        //Я не уверен, что поле делать через сетку кнопок хорошая идея. Типо инициализировали грид как поле, а потом опять инициализировать новый грид для пешек??? Странно
+        public void Board()
+        {
+            // Open a Uri and decode a BMP image
+            Uri myUri = new Uri("tulipfarm.bmp", UriKind.RelativeOrAbsolute);
+            BmpBitmapDecoder decoder2 = new BmpBitmapDecoder(myUri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            BitmapSource bitmapSource2 = decoder2.Frames[0];
+
+            // Draw the Image
+            Image myImage2 = new Image();
+            myImage2.Source = bitmapSource2;
+            myImage2.Stretch = Stretch.None;
+            myImage2.Margin = new Thickness(20);
+>>>>>>> Stashed changes
 
 
             BitmapImage whiteCheckers = new BitmapImage
@@ -114,3 +191,7 @@ namespace Checkers
         
     }
 }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
