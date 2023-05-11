@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Drawing;
@@ -75,10 +74,38 @@ namespace Checkers
             myGrid.RowDefinitions.Add(rowDef7);
             myGrid.RowDefinitions.Add(rowDef8);
             //написан кринж, переработать для оптимизации
+            //create the black-n-white chess grid with buttons as grid childrens
+            for (short i = 0; i < 8; i++)
+            {
+                for (short j = 0; j < 8; j++)
+                {
+                    Button btn1 = new Button();
 
-            
-
-
+                    if ((i + j) % 2 == 0)
+                    {
+                        btn1.Background = System.Windows.Media.Brushes.White; //<-- initially this was made for color of the cell, temporarily is used rn for checkers pieces test
+                    }
+                    else
+                    {
+                        btn1.Background = System.Windows.Media.Brushes.Black;
+                    }
+                    myGrid.Children.Add(btn1);
+                    Grid.SetColumn(btn1, j);
+                    Grid.SetRow(btn1, i);
+                }
+            }
+            mainWindow.Content = myGrid;
+        }
+        public enum Pieces
+        {
+                WhitePiece,
+                BlackPiece,
+                WhiteKing,
+                BlackKing
+        }
+        //Я не уверен, что поле делать через сетку кнопок хорошая идея. Типо инициализировали грид как поле, а потом опять инициализировать новый грид для пешек??? Странно
+        public void Board()
+        {
             BitmapImage whiteCheckers = new BitmapImage
                 (new Uri("images\\white.png", UriKind.Relative));
             BitmapImage blackCheckers = new BitmapImage
@@ -87,30 +114,28 @@ namespace Checkers
 
             ImageBrush whiteCheckersBrush = new ImageBrush(whiteCheckers);
             ImageBrush blackCheckersBrush = new ImageBrush(blackCheckers);
-            //create the black-n-white chess grid with buttons as grid childrens
-            for (short i = 0; i < 8; i++)
+            for (int i = 0;  i < 3; i++) 
             {
-                for (short j = 0; j < 8; j++)
+                for (int j = 0; j < 8; i++)
                 {
-                    Button btn1 = new Button();
-                    
-                    if((i+j) % 2 == 0)
+                    Button piece = new Button();
+                    if ((i + j) % 2 != 0)
                     {
-                        btn1.Background = whiteCheckersBrush; //<-- initially this was made for color of the cell, temporarily is used rn for checkers pieces test
-
-                    }
-                    else
-                    {
-                        btn1.Background = blackCheckersBrush;
-                    }
-                    myGrid.Children.Add(btn1);
-                    Grid.SetColumn(btn1, j);
-                    Grid.SetRow(btn1, i);
+                        piece.Background = whiteCheckersBrush;
+                    }    
                 }
             }
-            mainWindow.Content = myGrid;
-
+            for (int i = 5; i < 8; i++)
+            {
+                for (int j = 0; j < 8; i++)
+                {
+                    Button piece = new Button();
+                    if ((i + j) % 2 != 0)
+                    {
+                        piece.Background = blackCheckersBrush;
+                    }
+                }
+            }
         }
-        
     }
 }

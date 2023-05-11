@@ -1,16 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Checkers",
-    "\\Checkers\\Checkers",
-    "\\Checkers\\Checkers\\bin",
-    "\\Checkers\\Checkers\\bin\\Debug",
-    "\\Checkers\\Checkers\\obj",
-    "\\Checkers\\Checkers\\obj\\Debug"
+    ""
   ],
-
-  "SelectedNode": "\\Checkers\\Checkers\\MainWindow.xaml",
-
-
+  "SelectedNode": "\\Checkers.sln",
   "PreviewInSolutionExplorer": false
 }
