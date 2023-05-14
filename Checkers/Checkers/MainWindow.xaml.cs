@@ -15,7 +15,8 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Drawing;
-
+using static Checkers.MainWindow;
+using Image = System.Drawing.Image;
 namespace Checkers
 {
     /// <summary>
@@ -75,19 +76,38 @@ namespace Checkers
             myGrid.RowDefinitions.Add(rowDef8);
             //написан кринж, переработать для оптимизации
             //create the black-n-white chess grid with buttons as grid childrens
+
             for (short i = 0; i < 8; i++)
             {
                 for (short j = 0; j < 8; j++)
                 {
+
                     Button btn1 = new Button();
+                    BitmapImage whiteCheckers = new BitmapImage
+                    (new Uri("images\\whitebg.png", UriKind.Relative));
+                    BitmapImage blackCheckers = new BitmapImage
+                    (new Uri("images\\blackbg.png", UriKind.Relative));
+                    ImageBrush whiteCheckersBrush = new ImageBrush(whiteCheckers);
+                    ImageBrush blackCheckersBrush = new ImageBrush(blackCheckers);
 
                     if ((i + j) % 2 == 0)
                     {
-                        btn1.Background = System.Windows.Media.Brushes.White; //<-- initially this was made for color of the cell, temporarily is used rn for checkers pieces test
+                        btn1.Background = System.Windows.Media.Brushes.White; //<— initially this was made for color of the cell, temporarily is used rn for checkers pieces test
                     }
                     else
                     {
-                        btn1.Background = System.Windows.Media.Brushes.Black;
+                        btn1.Background = System.Windows.Media.Brushes.Gray;
+                    }
+                    if ((i + j) % 2 != 0 && i <= 2)
+                    {
+                        btn1.Background = whiteCheckersBrush;
+                    }
+                    else
+                    {
+                        if ((i + j) % 2 != 0 && i > 4 && i <= 7)
+                        {
+                            btn1.Background = blackCheckersBrush;
+                        }
                     }
                     myGrid.Children.Add(btn1);
                     Grid.SetColumn(btn1, j);
@@ -95,47 +115,6 @@ namespace Checkers
                 }
             }
             mainWindow.Content = myGrid;
-        }
-        public enum Pieces
-        {
-                WhitePiece,
-                BlackPiece,
-                WhiteKing,
-                BlackKing
-        }
-        //Я не уверен, что поле делать через сетку кнопок хорошая идея. Типо инициализировали грид как поле, а потом опять инициализировать новый грид для пешек??? Странно
-        public void Board()
-        {
-            BitmapImage whiteCheckers = new BitmapImage
-                (new Uri("images\\white.png", UriKind.Relative));
-            BitmapImage blackCheckers = new BitmapImage
-                (new Uri("images\\black.png", UriKind.Relative));
-
-
-            ImageBrush whiteCheckersBrush = new ImageBrush(whiteCheckers);
-            ImageBrush blackCheckersBrush = new ImageBrush(blackCheckers);
-            for (int i = 0;  i < 3; i++) 
-            {
-                for (int j = 0; j < 8; i++)
-                {
-                    Button piece = new Button();
-                    if ((i + j) % 2 != 0)
-                    {
-                        piece.Background = whiteCheckersBrush;
-                    }    
-                }
-            }
-            for (int i = 5; i < 8; i++)
-            {
-                for (int j = 0; j < 8; i++)
-                {
-                    Button piece = new Button();
-                    if ((i + j) % 2 != 0)
-                    {
-                        piece.Background = blackCheckersBrush;
-                    }
-                }
-            }
         }
     }
 }
