@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Checkers",
+    "\\Checkers\\Checkers",
+    "\\Checkers\\Checkers\\images"
   ],
-  "SelectedNode": "\\Checkers.sln",
+  "SelectedNode": "\\Checkers\\Checkers\\images\\white.png",
   "PreviewInSolutionExplorer": false
 }

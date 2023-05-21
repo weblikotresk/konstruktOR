@@ -16,7 +16,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Drawing;
 using static Checkers.MainWindow;
-using Image = System.Drawing.Image;
+using Image = System.Windows.Controls.Image;
 namespace Checkers
 {
     /// <summary>
@@ -33,9 +33,9 @@ namespace Checkers
         {
             // Create the Grid
             Grid myGrid = new Grid();
-            myGrid.Width = 800;
-            myGrid.Height = 800;
-            myGrid.HorizontalAlignment = HorizontalAlignment.Center;
+            myGrid.Width = 400;
+            myGrid.Height = 400;
+            myGrid.HorizontalAlignment = HorizontalAlignment.Left;
             myGrid.VerticalAlignment = VerticalAlignment.Center;
 
 
@@ -74,8 +74,6 @@ namespace Checkers
             myGrid.RowDefinitions.Add(rowDef6);
             myGrid.RowDefinitions.Add(rowDef7);
             myGrid.RowDefinitions.Add(rowDef8);
-            //написан кринж, переработать для оптимизации
-            //create the black-n-white chess grid with buttons as grid childrens
 
             for (short i = 0; i < 8; i++)
             {
@@ -83,16 +81,10 @@ namespace Checkers
                 {
 
                     Button btn1 = new Button();
-                    BitmapImage whiteCheckers = new BitmapImage
-                    (new Uri("images\\whitebg.png", UriKind.Relative));
-                    BitmapImage blackCheckers = new BitmapImage
-                    (new Uri("images\\blackbg.png", UriKind.Relative));
-                    ImageBrush whiteCheckersBrush = new ImageBrush(whiteCheckers);
-                    ImageBrush blackCheckersBrush = new ImageBrush(blackCheckers);
-
                     if ((i + j) % 2 == 0)
                     {
-                        btn1.Background = System.Windows.Media.Brushes.White; //<— initially this was made for color of the cell, temporarily is used rn for checkers pieces test
+                        btn1.Background = System.Windows.Media.Brushes.White;
+                        
                     }
                     else
                     {
@@ -100,13 +92,21 @@ namespace Checkers
                     }
                     if ((i + j) % 2 != 0 && i <= 2)
                     {
-                        btn1.Background = whiteCheckersBrush;
+                        btn1.Content = new Image
+                        {
+                            //TO-DO:
+                            //fix the global path to local, it gives more flexibility
+                            Source = new BitmapImage(new Uri("D:\\kursova\\konstruktOR\\Checkers\\Checkers\\images\\white.png"))
+                        };
                     }
                     else
                     {
                         if ((i + j) % 2 != 0 && i > 4 && i <= 7)
                         {
-                            btn1.Background = blackCheckersBrush;
+                            btn1.Content = new Image
+                            {
+                                Source = new BitmapImage(new Uri("D:\\kursova\\konstruktOR\\Checkers\\Checkers\\images\\black.png"))
+                            };
                         }
                     }
                     myGrid.Children.Add(btn1);
