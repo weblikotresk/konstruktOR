@@ -8,13 +8,4 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
-    <Button>
-        <StackPanel Orientation="Vertical">
-            <Image Source="images/white.png" 
-               Height="36" 
-               Width="36"/>
-            <Label HorizontalAlignment="Center"
-               Content="My Button Text" />
-        </StackPanel>
-    </Button>
 </Window>
