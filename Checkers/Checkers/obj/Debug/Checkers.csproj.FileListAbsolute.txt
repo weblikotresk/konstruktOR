@@ -14,3 +14,54 @@ D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.GenerateResou
 D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
 D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.exe
 D:\kursova\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.pdb
+<<<<<<< Updated upstream
+=======
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.exe.config
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.exe
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.pdb
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.AssemblyReference.cache
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.SuggestedBindingRedirects.cache
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\MainWindow.g.cs
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\App.g.cs
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.cache
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.lref
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\MainWindow.baml
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.g.resources
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.Properties.Resources.resources
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.GenerateResource.cache
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.exe
+C:\Users\andre\Desktop\Vtoroi Kurs\четвёртвый семестр\ЭВМ\Курсач\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.pdb
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.exe.config
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.exe
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\bin\Debug\Checkers.pdb
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.AssemblyReference.cache
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.SuggestedBindingRedirects.cache
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\MainWindow.g.cs
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\App.g.cs
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.cache
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.lref
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\MainWindow.baml
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.g.resources
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.Properties.Resources.resources
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.GenerateResource.cache
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.exe
+C:\Users\andre\Desktop\repos\konstruktOR\Checkers\Checkers\obj\Debug\Checkers.pdb
+D:\kursova\Checkers\Checkers\bin\Debug\Checkers.exe.config
+D:\kursova\Checkers\Checkers\bin\Debug\Checkers.exe
+D:\kursova\Checkers\Checkers\bin\Debug\Checkers.pdb
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.csproj.AssemblyReference.cache
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.csproj.SuggestedBindingRedirects.cache
+D:\kursova\Checkers\Checkers\obj\Debug\MainWindow.g.cs
+D:\kursova\Checkers\Checkers\obj\Debug\App.g.cs
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.cache
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers_MarkupCompile.lref
+D:\kursova\Checkers\Checkers\obj\Debug\MainWindow.baml
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.g.resources
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.Properties.Resources.resources
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.csproj.GenerateResource.cache
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.exe
+D:\kursova\Checkers\Checkers\obj\Debug\Checkers.pdb
+>>>>>>> Stashed changes
