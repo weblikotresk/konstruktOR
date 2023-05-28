@@ -25,7 +25,9 @@ namespace Checkers
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Grid mainGrid { get; set; }  
+        public Grid mainGrid { get; set; }
+
+        public List<Button> buttonList = new List<Button>();
         public MainWindow()
         {
             InitializeComponent();
@@ -73,7 +75,7 @@ namespace Checkers
 
 
                 whiteCellStyle = new Style(typeof(Button));
-                ControlTemplate whiteTemplateButton = new ControlTemplate(typeof(Button)); ;
+                ControlTemplate whiteTemplateButton = new ControlTemplate(typeof(Button));
 
                 ////STARTS HERE <<-- have no idea why it works, but it does 
                 FrameworkElementFactory whiteElemFactory = new FrameworkElementFactory(typeof(Border));
@@ -90,25 +92,25 @@ namespace Checkers
 
 
                 clickedCellStyle = new Style(typeof(Button), grayCellStyle);
-                Trigger clickedStyleTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
-                Trigger focusStyleTrigger = new Trigger { Property = Button.IsKeyboardFocusedProperty, Value = true };
+                Trigger clickedStyleTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true }; 
+                Trigger keyFocusStyleTrigger = new Trigger { Property = Button.IsKeyboardFocusedProperty, Value = true };
+                //Trigger focusStyleTrigger = new Trigger { Property = Button.IsFocusedProperty, Value = true };
+
+
+                //focusStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
                 clickedStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
-                focusStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
+                keyFocusStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
+
+
 
                 clickedCellStyle.Triggers.Add(clickedStyleTrigger);
-                clickedCellStyle.Triggers.Add(focusStyleTrigger);
-
+                clickedCellStyle.Triggers.Add(keyFocusStyleTrigger);
+                //clickedCellStyle.Triggers.Add(focusStyleTrigger);
 
 
                 disabledCellStyle = new Style(typeof(Button), whiteCellStyle);
                 disabledCellStyle.Setters.Add(new Setter { Property = Button.IsEnabledProperty, Value = false });
-
-                disabledCellStyle.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.LightGray });
-                //disabledCellStyle.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.LightGray });
-
-
-
-                // Private constructor to prevent direct instantiation
+                disabledCellStyle.Setters.Add(new Setter { Property = Button.OpacityProperty, Value = 0.25});
             }
 
             public static buttonStyles Instance
@@ -121,6 +123,8 @@ namespace Checkers
                 }
             }
         }
+
+
         public class gameBoard
         {
             private static gameBoard instance;
@@ -132,8 +136,9 @@ namespace Checkers
 
                 gameMatrix = new short[,]
                 {
-                //whites are 1, blacks are 2, empty cell is zero;
-                //supreme pieces will be negative, i.e. -2 is supreme black piece
+                //blacks are 1, whites are 2, empty cell is zero;
+                //supreme pieces will be negative, i.e. -1 is supreme black piece
+
                 {0,1,0,1,0,1,0,1},
                 {1,0,1,0,1,0,1,0},
                 {0,1,0,1,0,1,0,1},
@@ -141,10 +146,26 @@ namespace Checkers
                 {0,0,0,0,0,0,0,0},
                 {2,0,2,0,2,0,2,0},
                 {0,2,0,2,0,2,0,2},
-                {2,0,2,0,2,0,2,0}
-                };
+                {2,0,2,0,2,0,2,0}};
 
             }
+            //i= rows, j=cols
+            
+
+            //виды ходов:
+            /*
+             1. ход на пустое место
+
+                [i+1][j+1]=0 || [i-1][j-1]=0
+            невозможность нажатия на пустые кнопки, кроме предлагаемых
+
+
+            2. ход через шашку
+             
+             
+             */
+
+
             public static gameBoard Instance
             {
                 get
@@ -155,11 +176,6 @@ namespace Checkers
                 }
             }
         }
-
-
-
-
-
 
 
         public Grid createGrid()
@@ -177,8 +193,6 @@ namespace Checkers
             Style grayCellStyleIN = buttonStyles.Instance.grayCellStyle;
             Style whiteCellStyleIN = buttonStyles.Instance.whiteCellStyle;
 
-
-
             for (short i = 0; i < 8; i++)
             {
                 myGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -187,42 +201,46 @@ namespace Checkers
                 {
                    
                     Button btn1 = new Button();
-                    btn1.Style = ((i + j) % 2 == 0) ? whiteCellStyleIN : grayCellStyleIN;
+                    buttonList.Add(btn1);
+                    buttonList[i * 8 + j].Style = ((i + j) % 2 == 0) ? whiteCellStyleIN : grayCellStyleIN;
                     
 
                     if ((i + j) % 2 != 0 && i <= 2)
                     {
-                        btn1.Click += new RoutedEventHandler(pieceClicked);
-                        btn1.Content = new Image
+                        buttonList[i * 8 + j].Click += new RoutedEventHandler(pieceClicked);
+                        buttonList[i * 8 + j].LostFocus += new RoutedEventHandler(pieceDefocused);
+                        buttonList[i * 8 + j].Content = new Image
                         {
                             //TO-DO:
                             //fix the global path to local, it gives more flexibility
                             Width= myGrid.Width / 10,
-                            Source = new BitmapImage(new Uri("C:\\Users\\space\\Downloads\\konstruktOR-kursova-working\\konstruktOR-kursova-working\\Checkers\\Checkers\\images\\white.png"))
+                            Source = new BitmapImage(new Uri("C:\\Users\\space\\Downloads\\konstruktOR-kursova-working\\konstruktOR-kursova-working\\Checkers\\Checkers\\images\\black.png"))
                         };
                     }
                     else
                     {
                         if ((i + j) % 2 != 0 && i > 4 && i <= 7)
                         {
-                            btn1.Click += new RoutedEventHandler(pieceClicked);
-                            btn1.Content = new Image
+                            buttonList[i * 8 + j].Click += new RoutedEventHandler(pieceClicked);
+                            buttonList[i * 8 + j].LostFocus += new RoutedEventHandler(pieceDefocused);
+                            buttonList[i * 8 + j].Content = new Image
                             {
                                 Width = myGrid.Width / 10,
-                                Source = new BitmapImage(new Uri("C:\\Users\\space\\Downloads\\konstruktOR-kursova-working\\konstruktOR-kursova-working\\Checkers\\Checkers\\images\\black.png"))
+                                Source = new BitmapImage(new Uri("C:\\Users\\space\\Downloads\\konstruktOR-kursova-working\\konstruktOR-kursova-working\\Checkers\\Checkers\\images\\white.png"))
                             };
                         }
                     }
-                    myGrid.Children.Add(btn1);
-                    Grid.SetColumn(btn1, j);
-                    Grid.SetRow(btn1, i);
+                    myGrid.Children.Add(buttonList[i * 8 + j]);
+                    Grid.SetColumn(buttonList[i * 8 + j], j);
+                    Grid.SetRow(buttonList[i * 8 + j], i);
                 }
             }
 
            
             return myGrid;
         }
-        //--------CONSTRUCTION ZONE-----------//
+
+
 
         UIElement GetGridElement(Grid g, int r, int c)
         {
@@ -235,6 +253,19 @@ namespace Checkers
             return null;
         }
 
+        public void pieceDefocused(object sender, RoutedEventArgs e)
+        {
+            Button lostButton = (Button)sender;
+            lostButton.Style = buttonStyles.Instance.grayCellStyle;
+            for (short i = 0; i < 8; i++)
+            {
+                for (short j = 0; j < 8; j++)
+                {
+                    buttonList[i * 8 + j].Opacity =  1;
+                }
+            }
+        }
+
         public void pieceClicked(object sender, EventArgs e)
         {
             Button clickedButton = (Button)sender;
@@ -244,52 +275,46 @@ namespace Checkers
             int rowIndex = Grid.GetRow(clickedButton);
             int colIndex = Grid.GetColumn(clickedButton);
 
-
-            // Store the references to the child elements to be removed
-            List<UIElement> elementsToRemove = new List<UIElement>();
-
-            // Find the child elements to remove
-            foreach (UIElement child in mainGrid.Children)
-            {
-                int childRowIndex = Grid.GetRow(child);
-                int childColIndex = Grid.GetColumn(child);
-
-                if (childRowIndex != rowIndex || childColIndex != colIndex)
-                {
-                    elementsToRemove.Add(child);
-                }
-                else
-                {
-                    MessageBox.Show("Try to");
-                }
-            }
-            foreach (UIElement element in elementsToRemove)
-            {
-                mainGrid.Children.Remove(element);
-            }
-
-
-            MessageBox.Show(Convert.ToString(rowIndex));
-            MessageBox.Show(Convert.ToString(colIndex));
             for (short i = 0; i < 8; i++)
             {
                 for (short j = 0; j < 8; j++)
                 {
-                    if (i != rowIndex || j != colIndex)
-                    {
-                        Button disabledButton = new Button();
-                        disabledButton.Content = mainGrid.Children[i * 8 + j];
-                        disabledButton.Style = buttonStyles.Instance.disabledCellStyle;
-                        mainGrid.Children.Insert(i * 8 + j, disabledButton);
-                    }
-                    else
-                    {//the problem is right here
-                        MessageBox.Show("Epic");
-                    }
-
+                    buttonList[i * 8 + j].Opacity = (i != rowIndex || j != colIndex) ? 0.65 : 1;
                 }
             }
 
+            makeMove(gameBoard.Instance.gameMatrix, rowIndex, colIndex);
+
+        }
+
+
+        //work in progress down below
+        public void makeMove(short [,] gameMatrix, int currRow, int currCol)
+        {
+            bool notOutOfPosRange = (currRow + 1 < 8 && currCol + 1 < 8);
+            bool notOutOfNegRange = (currRow - 1 > 8 && currCol - 1 > 8);
+
+            if(notOutOfNegRange && gameMatrix[currRow - 1, currCol - 1] == 0)
+            {
+                buttonList[(currRow-1) * 8 + (currCol-1)].Background = System.Windows.Media.Brushes.Blue;
+            }
+
+            if (notOutOfPosRange && gameMatrix[currRow + 1, currCol + 1] == 0)
+            {
+                buttonList[(currRow+1) * 8 + (currCol+1)].Background = System.Windows.Media.Brushes.Blue;
+            }
+
+            for (short i = 0; i < 8; i++)
+            {
+                for (short j = 0; j < 8; j++)
+                {
+                    if (gameMatrix[i,j] == 0)
+                    {
+                        buttonList[i*8+j].Style = buttonStyles.Instance.disabledCellStyle;
+                    }
+                    
+                }
+            }
         }
 
 
