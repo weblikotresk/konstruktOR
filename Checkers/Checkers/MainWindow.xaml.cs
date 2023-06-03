@@ -25,7 +25,8 @@ namespace Checkers
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Grid mainGrid { get; set; }
+        public Grid MainGrid { get; set; }
+        //public Gameboard Gameboard { get; set; }
 
         public MainWindow()
         {
@@ -34,220 +35,15 @@ namespace Checkers
         }
         public void Init()
         {
-            mainGrid = CreateGrid();
-            mainWindow.Content = mainGrid;
+            MainGrid = CreateGrid();
+            mainWindow.Content = MainGrid;
+            //Gameboard = new Gameboard();
         }
 
-
-        public class ButtonStyles
-        {
-            private static ButtonStyles instance;
-
-            public Style grayCellStyle { get; set; }
-            public Style whiteCellStyle { get; set; }
-            public Style clickedCellStyle { get; set; }
-
-            public Style highlightedCellStyle { get; set; }
-            // public Style disabledCellStyle { get; set; }
-
-
-            private ButtonStyles()
-            {
-                grayCellStyle = new Style();
-                ControlTemplate templateButton = new ControlTemplate(typeof(Button));
-
-                //STARTS HERE <<-- have no idea why it works, but it does 
-                FrameworkElementFactory elemFactory = new FrameworkElementFactory(typeof(Border));
-                elemFactory.SetBinding(Border.BackgroundProperty, new Binding { RelativeSource = RelativeSource.TemplatedParent, Path = new PropertyPath("Background") });
-                templateButton.VisualTree = elemFactory;
-                elemFactory.AppendChild(new FrameworkElementFactory(typeof(ContentPresenter)));
-                //ENDS HERE
-
-                grayCellStyle.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Gray });
-                grayCellStyle.Setters.Add(new Setter { Property = Button.TemplateProperty, Value = templateButton });
-                Trigger styleTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
-                Trigger focusTrigger = new Trigger { Property = Button.IsKeyboardFocusedProperty, Value = true };
-                styleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.NavajoWhite });
-                focusTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.NavajoWhite });
-                grayCellStyle.Triggers.Add(styleTrigger);
-                grayCellStyle.Triggers.Add(focusTrigger);
-
-
-
-
-                whiteCellStyle = new Style(typeof(Button));
-                ControlTemplate whiteTemplateButton = new ControlTemplate(typeof(Button));
-
-                ////STARTS HERE <<-- have no idea why it works, but it does 
-                FrameworkElementFactory whiteElemFactory = new FrameworkElementFactory(typeof(Border));
-                whiteElemFactory.SetBinding(Border.BackgroundProperty, new Binding { RelativeSource = RelativeSource.TemplatedParent, Path = new PropertyPath("Background") });
-                whiteTemplateButton.VisualTree = whiteElemFactory;
-                whiteElemFactory.AppendChild(new FrameworkElementFactory(typeof(ContentPresenter)));
-                ////ENDS HERE
-
-                whiteCellStyle.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.White });
-                whiteCellStyle.Setters.Add(new Setter { Property = Button.TemplateProperty, Value = whiteTemplateButton });
-                Trigger whiteStyleTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
-                whiteCellStyle.Triggers.Add(whiteStyleTrigger);
-
-
-
-                clickedCellStyle = new Style(typeof(Button), grayCellStyle);
-                Trigger clickedStyleTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
-                Trigger keyFocusStyleTrigger = new Trigger { Property = Button.IsKeyboardFocusedProperty, Value = true };
-                //Trigger focusStyleTrigger = new Trigger { Property = Button.IsFocusedProperty, Value = true };
-
-
-                //focusStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
-                clickedStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
-                keyFocusStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
-
-
-
-                clickedCellStyle.Triggers.Add(clickedStyleTrigger);
-                clickedCellStyle.Triggers.Add(keyFocusStyleTrigger);
-
-
-
-
-
-                highlightedCellStyle = new Style(typeof(Button), grayCellStyle);
-                highlightedCellStyle.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Blue });
-                Trigger clickedStyleTrigger1 = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
-                Trigger keyFocusStyleTrigger1 = new Trigger { Property = Button.IsKeyboardFocusedProperty, Value = true };
-
-                clickedStyleTrigger1.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Yellow });
-                keyFocusStyleTrigger1.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Yellow });
-
-                highlightedCellStyle.Triggers.Add(clickedStyleTrigger1);
-                highlightedCellStyle.Triggers.Add(keyFocusStyleTrigger1);
-
-            }
-
-            public static ButtonStyles Instance
-            {
-                get
-                {
-                    if (instance == null)
-                        instance = new ButtonStyles();
-                    return instance;
-                }
-            }
-        }
-
-
-        public class ActiveButton
-        {
-            public short Row;
-            public short Column;
-            public short Type;
-        }
-
-        public class Buttons
-        {
-            private static Buttons instance;
-
-            public List<Button> buttonElements;
-
-            public ActiveButton ActiveButton;
-            
-            public void RenderPieceInButton(bool isBlack, int index, double width)
-            {
-                buttonElements[index].Content = new Image
-                {
-                    Width = width,
-                    Source =
-                    isBlack ? new BitmapImage(new Uri("C:\\Users\\space\\Downloads\\konstruktOR-kursova-working\\konstruktOR-kursova-working\\Checkers\\Checkers\\images\\black.png")) : new BitmapImage(new Uri("C:\\Users\\space\\Downloads\\konstruktOR-kursova-working\\konstruktOR-kursova-working\\Checkers\\Checkers\\images\\white.png"))
-                };
-            }
-
-            public void RemoveActivePiece()
-            {
-                buttonElements[ActiveButton.Row * 8 + ActiveButton.Column].Content = null;
-                GameBoard.Instance.GameMatrix[ActiveButton.Row, ActiveButton.Column] = 0;
-            }
-
-
-            public Buttons()
-            {
-                buttonElements = new List<Button>();
-                ActiveButton = new ActiveButton();
-
-            }
-
-
-            public static Buttons Instance
-            {
-                get
-                {
-                    if (instance == null)
-                        instance = new Buttons();
-                    return instance;
-                }
-            }
-        }
-
-        public class GameBoard
-        {
-            private static GameBoard instance;
-
-            public short[,] GameMatrix { get; set; }
-
-
-           
-
-            public GameBoard()
-            {
-
-                GameMatrix = new short[,]
-                {
-                //blacks are 1, whites are 2, empty cell is zero;
-                //supreme pieces will be negative, i.e. -1 is supreme black piece
-                // highlighted empty cells are 3, source of highlight is +3, i.e. 5 - white source of highlight
-                {0,1,0,1,0,1,0,1},
-                {1,0,1,0,1,0,1,0},
-                {0,1,0,1,0,1,0,1},
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0},
-                {2,0,2,0,2,0,2,0},
-                {0,2,0,2,0,2,0,2},
-                {2,0,2,0,2,0,2,0}};
-
-
-
-            }
-            //i= rows, j=cols
-
-
-            //виды ходов:
-            /*
-             +1. ход на пустое место
-
-                [i+1][j+1]=0 || [i-1][j-1]=0
-            невозможность нажатия на пустые кнопки, кроме предлагаемых
-
-
-            2. ход через шашку
-             
-             
-             */
-
-
-            public static GameBoard Instance
-            {
-                get
-                {
-                    if (instance == null)
-                        instance = new GameBoard();
-                    return instance;
-                }
-            }
-        }
 
 
         public Grid CreateGrid()
         {
-            // Create the Grid
             Grid myGrid = new Grid() {
                 Width = 400,
                 Height = 400,
@@ -255,38 +51,38 @@ namespace Checkers
                 VerticalAlignment = VerticalAlignment.Center,
 
             };
-
-            //to get rid of default hover behavior, we need to assign our own button style
             for (short i = 0; i < 8; i++)
             {
                 myGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 myGrid.RowDefinitions.Add(new RowDefinition());
                 for (short j = 0; j < 8; j++)
                 {
+                    GridButton gridButton = new GridButton {
+                        Row = i,
+                        Column = j,
+                        Content = new Button()
+                    };
+                    gridButton.Content.Style = ((i + j) % 2 == 0) ? ButtonStyles.Instance.whiteCellStyle : ButtonStyles.Instance.grayCellStyle;
+                    gridButton.Content.Click += new RoutedEventHandler(CellClicked);
+                    gridButton.Content.LostFocus += new RoutedEventHandler(PieceDefocused);
 
-                    Button btn1 = new Button();
-                    Buttons.Instance.buttonElements.Add(btn1);
-                    Buttons.Instance.buttonElements[i * 8 + j].Style = ((i + j) % 2 == 0) ? ButtonStyles.Instance.whiteCellStyle : ButtonStyles.Instance.grayCellStyle;
-                    Buttons.Instance.buttonElements[i * 8 + j].Click += new RoutedEventHandler(CellClicked);
-                    Buttons.Instance.buttonElements[i * 8 + j].LostFocus += new RoutedEventHandler(PieceDefocused);
-
+                    Gameboard.Instance.GridButtons.Add(gridButton);
                     if ((i + j) % 2 != 0 && i <= 2)
-                    {//black
-                        Buttons.Instance.RenderPieceInButton(true, i * 8 + j, myGrid.Width / 10);
+                    {
+                        Gameboard.Instance.RenderImage(true, i * 8 + j, myGrid.Width / 10);
+                        gridButton.Type = (int)CellTypes.Black;
                     }
                     else if ((i + j) % 2 != 0 && i > 4 && i <= 7)
-                    {//white
-                        Buttons.Instance.RenderPieceInButton(false,i * 8+j, myGrid.Width / 10);
-
+                    {
+                        Gameboard.Instance.RenderImage(false, i * 8+j, myGrid.Width / 10);
+                        gridButton.Type = (int)CellTypes.White;
                     }
 
-                    myGrid.Children.Add(Buttons.Instance.buttonElements[i * 8 + j]);
-                    Grid.SetColumn(Buttons.Instance.buttonElements[i * 8 + j], j);
-                    Grid.SetRow(Buttons.Instance.buttonElements[i * 8 + j], i);
+                    myGrid.Children.Add(gridButton.Content);
+                    Grid.SetColumn(gridButton.Content, j);
+                    Grid.SetRow(gridButton.Content, i);
                 }
             }
-
-
             return myGrid;
         }
 
@@ -294,25 +90,23 @@ namespace Checkers
 
         public void PieceDefocused(object sender, RoutedEventArgs e)
         {
-
             Button lostButton = (Button)sender;
             int rowIndex = Grid.GetRow(lostButton);
             int colIndex = Grid.GetColumn(lostButton);
             
-            bool IsCellClicked = GameBoard.Instance.GameMatrix[rowIndex, colIndex] == 1 ||
-                                    GameBoard.Instance.GameMatrix[rowIndex, colIndex] == 2;
+            bool IsPieceClicked = Gameboard.Instance.GetType(rowIndex, colIndex) == 1 ||
+                                    Gameboard.Instance.GetType(rowIndex, colIndex) == 2;
+            
+            if (IsPieceClicked) lostButton.Style = ButtonStyles.Instance.grayCellStyle;
+            
 
-            if(IsCellClicked) lostButton.Style = ButtonStyles.Instance.grayCellStyle;
-            foreach (Button buttonChild in Buttons.Instance.buttonElements)
-            {   //if button is highlighted
-                if (GameBoard.Instance.GameMatrix[Grid.GetRow(buttonChild), Grid.GetColumn(buttonChild)] == 3)
-                {
-                    //GameBoard.Instance.gameMatrix[Grid.GetRow(buttonChild), Grid.GetColumn(buttonChild)] = 0;
-                    buttonChild.Style = ButtonStyles.Instance.grayCellStyle;
-                }
+            foreach (GridButton gridButton in Gameboard.Instance.GridButtons)
+            {
+                //if button is highlighted
+                if (Gameboard.Instance.GetType(gridButton.Row, gridButton.Column) == 3) gridButton.Content.Style = ButtonStyles.Instance.grayCellStyle;
 
-                if (IsCellClicked) buttonChild.Opacity = 1;
-            }
+                if (IsPieceClicked) gridButton.Content.Opacity = 1;
+            }   
 
 
         }
@@ -322,61 +116,149 @@ namespace Checkers
             Button clickedButton = (Button)sender;
             int rowIndex = Grid.GetRow(clickedButton);
             int colIndex = Grid.GetColumn(clickedButton);
-            bool IsCellClicked = GameBoard.Instance.GameMatrix[rowIndex, colIndex] == 1 ||
-                                    GameBoard.Instance.GameMatrix[rowIndex, colIndex] == 2;
+            bool IsPiececlicked = Gameboard.Instance.GetType(rowIndex, colIndex) == 1 ||
+                                    Gameboard.Instance.GetType(rowIndex, colIndex) == 2;
 
-            if (IsCellClicked) clickedButton.Style = ButtonStyles.Instance.clickedCellStyle;
+            if (IsPiececlicked) clickedButton.Style = ButtonStyles.Instance.clickedCellStyle;
 
-
-            if (GameBoard.Instance.GameMatrix[rowIndex, colIndex] == 3)
+            //the move
+            if (Gameboard.Instance.GetType(rowIndex, colIndex) == 3)
             {
-                GameBoard.Instance.GameMatrix[rowIndex, colIndex] = Buttons.Instance.ActiveButton.Type;
+                Gameboard.Instance.SetType(rowIndex, colIndex, Gameboard.Instance.TypeActiveButton);
 
-                Buttons.Instance.RenderPieceInButton(Buttons.Instance.ActiveButton.Type == 1, rowIndex * 8 + colIndex, mainGrid.Width/10);
+                Gameboard.Instance.RenderImage(Gameboard.Instance.TypeActiveButton == 1, rowIndex * 8 + colIndex, MainGrid.Width / 10);
 
-                Buttons.Instance.RemoveActivePiece();
+
+                 Gameboard.Instance.RemovePiece(Gameboard.Instance.IndexActiveButton);
+
+                if (Gameboard.Instance.IsToAttack) EatPiece(Gameboard.Instance.IndexToBeEaten);
+
+                Gameboard.Instance.PlayerTurn = !Gameboard.Instance.PlayerTurn;
             }
 
             for (short i = 0; i < 8; i++)
                 {
                     for (short j = 0; j < 8; j++)
                     {
-                        if (GameBoard.Instance.GameMatrix[i, j] == 3)
-                        {
-                        GameBoard.Instance.GameMatrix[i, j] = 0;
-                        }
+                        if (Gameboard.Instance.GetType(i, j) == 3) Gameboard.Instance.SetType(i, j, 0);
 
-                        if (IsCellClicked) 
-                            Buttons.Instance.buttonElements[i * 8 + j].Opacity = (i != rowIndex || j != colIndex) ? 0.65 : 1;
+                        if (IsPiececlicked) 
+                            Gameboard.Instance.GridButtons[i*8+j].Content.Opacity = (i != rowIndex || j != colIndex) ? 0.65 : 1;
                     }
                 }
            //предлагать ход только для шашки
-            if (IsCellClicked) SuggestMoves(GameBoard.Instance.GameMatrix, rowIndex, colIndex);
+            if (IsPiececlicked) SuggestMoves(Gameboard.Instance.GridButtons, rowIndex, colIndex);
         }
-
-        public void SuggestMoves(short [,] gameMatrix, int currRow, int currCol)
+        public void SuggestMoves(List<GridButton> gridButtons, int currRow, int currCol)
         {
-            bool notOutOfPosRange = (currRow - 1 > 0 && currCol + 1 < 8);
-            bool notOutOfNegRange = (currRow - 1 > 0 && currCol - 1 >= 0);
+            Gameboard.Instance.IndexActiveButton = currRow * 8 + currCol;
+            Gameboard.Instance.TypeActiveButton = Gameboard.Instance.GetType(currRow * 8 + currCol);
+            bool notOutOfTopLeftRange = (currRow - 1 >= 0 && currCol - 1 >= 0);
+            bool notOutOfTopRightRange = (currRow - 1 >= 0 && currCol + 1 <= 8);
 
-            Buttons.Instance.ActiveButton.Row=(short)currRow;
-            Buttons.Instance.ActiveButton.Column = (short)currCol;
-            Buttons.Instance.ActiveButton.Type = gameMatrix[currRow, currCol];
-            //left position is empty and highlighted
-            if (notOutOfNegRange && gameMatrix[currRow - 1, currCol - 1] == 0)
+            bool notOutOfTopLeftAttackRange = (currRow - 2 >= 0 && currCol - 2 >= 0);
+            bool notOutOfTopRightAttackRange = (currRow - 2 >= 0 && currCol + 2 <= 8);
+
+            bool notOutOfBottomLeftRange = (currRow + 1 <= 8 && currCol - 1 >= 0);
+            bool notOutOfBottomRightRange = (currRow + 1 <= 8 && currCol + 1 <= 8);
+
+            bool notOutOfBottomLeftAttackRange = (currRow + 2 <= 8 && currCol - 2 >= 0);
+            bool notOutOfBottomRightAttackRange = (currRow + 2 <= 8 && currCol + 2 <= 8);
+
+            if (notOutOfTopLeftAttackRange && notOutOfTopLeftRange && (Gameboard.Instance.GetType(currRow - 1, currCol - 1) != Gameboard.Instance.TypeActiveButton && Gameboard.Instance.GetType(currRow - 1, currCol - 1) != 0) && Gameboard.Instance.GetType(currRow - 2, currCol - 2) == 0)
             {
-                Buttons.Instance.buttonElements[(currRow - 1) * 8 + (currCol - 1)].Style = ButtonStyles.Instance.highlightedCellStyle;
-                gameMatrix[currRow - 1, currCol - 1] = 3;
+                gridButtons[(currRow - 2) * 8 + (currCol - 2)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                Gameboard.Instance.SetType(currRow - 2, currCol - 2, 3);
+
+                Gameboard.Instance.IndexToBeEaten = (currRow - 1) * 8 + (currCol - 1);
+                Gameboard.Instance.TypeToBeEaten = Gameboard.Instance.GetType(currRow - 1, currCol - 1);
+
+                Gameboard.Instance.IsToAttack = true;
 
             }
-            //right position is empty and highlighted
-            if (notOutOfPosRange && gameMatrix[currRow - 1, currCol + 1] == 0)
+            if (notOutOfTopRightAttackRange && notOutOfTopRightRange && (Gameboard.Instance.GetType(currRow - 1, currCol + 1) != Gameboard.Instance.TypeActiveButton && Gameboard.Instance.GetType(currRow - 1, currCol + 1) != 0) && Gameboard.Instance.GetType(currRow - 2, currCol + 2) == 0)
             {
-                Buttons.Instance.buttonElements[(currRow - 1) * 8 + (currCol + 1)].Style = ButtonStyles.Instance.highlightedCellStyle;
-                gameMatrix[currRow - 1, currCol + 1] = 3;
+                gridButtons[(currRow - 2) * 8 + (currCol + 2)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                Gameboard.Instance.SetType(currRow - 2, currCol + 2, 3);
+
+                Gameboard.Instance.IndexToBeEaten = (currRow - 1) * 8 + (currCol + 1);
+                Gameboard.Instance.TypeToBeEaten = Gameboard.Instance.GetType(currRow - 1, currCol + 1);
+                Gameboard.Instance.IsToAttack = true;
             }
+            if (notOutOfBottomLeftAttackRange && notOutOfBottomLeftRange && (Gameboard.Instance.GetType(currRow + 1, currCol - 1) != Gameboard.Instance.TypeActiveButton && Gameboard.Instance.GetType(currRow + 1, currCol - 1) != 0) && Gameboard.Instance.GetType(currRow + 2, currCol - 2) == 0)
+            {
+                gridButtons[(currRow + 2) * 8 + (currCol - 2)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                Gameboard.Instance.SetType(currRow + 2, currCol - 2, 3);
+                Gameboard.Instance.IndexToBeEaten = (currRow + 1) * 8 + (currCol - 1);
+                Gameboard.Instance.TypeToBeEaten = Gameboard.Instance.GetType(currRow + 1, currCol - 1);
+                Gameboard.Instance.IsToAttack = true;
+
+            }
+            if (notOutOfBottomRightAttackRange && notOutOfBottomRightRange && (Gameboard.Instance.GetType(currRow + 1, currCol + 1) != Gameboard.Instance.TypeActiveButton && Gameboard.Instance.GetType(currRow + 1, currCol + 1) != 0) && Gameboard.Instance.GetType(currRow + 2, currCol + 2) == 0)
+            {
+                gridButtons[(currRow + 2) * 8 + (currCol + 2)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                Gameboard.Instance.SetType(currRow + 2, currCol + 2, 3);
+
+                Gameboard.Instance.IndexToBeEaten = (currRow + 1) * 8 + (currCol + 1);
+                Gameboard.Instance.TypeToBeEaten = Gameboard.Instance.GetType(currRow + 1, currCol + 1);
+
+                Gameboard.Instance.IsToAttack = true;
+            }
+
+            if (Gameboard.Instance.PlayerTurn)
+            {
+                //upwards
+
+                bool notOutOfNegRange = (currRow - 1 >= 0 && currCol - 1 >= 0);
+                bool notOutOfPosRange = (currRow - 1 >= 0 && currCol + 1 < 8);
+
+
+                
+
+                //left position is empty and highlighted
+                 if (!Gameboard.Instance.IsToAttack && notOutOfNegRange && Gameboard.Instance.GetType(currRow - 1, currCol - 1) == 0)
+                {
+                    gridButtons[(currRow - 1) * 8 + (currCol - 1)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                    Gameboard.Instance.SetType(currRow - 1, currCol - 1, 3);
+                }
+
+                if (!Gameboard.Instance.IsToAttack && notOutOfPosRange && Gameboard.Instance.GetType(currRow - 1, currCol + 1) == 0)
+                {
+                    gridButtons[(currRow - 1) * 8 + (currCol + 1)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                    Gameboard.Instance.SetType(currRow - 1, currCol + 1, 3);
+                }
+
+
+            }
+            //downwards
+            else
+            {
+                bool notOutOfNegRange = (currRow + 1 < 8 && currCol - 1 >= 0);//left
+                bool notOutOfPosRange = (currRow + 1 < 8 && currCol + 1 < 8);//right
+               
+                //left position is empty and highlighted
+                if (!Gameboard.Instance.IsToAttack && notOutOfNegRange && Gameboard.Instance.GetType(currRow + 1, currCol - 1) == 0)
+                {
+                    gridButtons[(currRow + 1) * 8 + (currCol - 1)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                    Gameboard.Instance.SetType(currRow + 1, currCol - 1, 3);
+
+                }//right position is empty and highlighted
+                if (!Gameboard.Instance.IsToAttack && notOutOfPosRange && Gameboard.Instance.GetType(currRow + 1, currCol + 1) == 0)
+                {
+                    gridButtons[(currRow + 1) * 8 + (currCol + 1)].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
+                    Gameboard.Instance.SetType(currRow + 1, currCol + 1, 3);
+                }
+
+            }
+
+           
         }
 
+        public void EatPiece(int index)
+        {
+            Gameboard.Instance.IsToAttack = false;
+            Gameboard.Instance.RemovePiece(index);
+        }
 
     }
 }

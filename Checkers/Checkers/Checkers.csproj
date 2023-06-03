@@ -64,6 +64,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ButtonStyles.cs" />
+    <Compile Include="CellTtypes.cs" />
+    <Compile Include="Gameboard.cs" />
+    <Compile Include="GridButton.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
