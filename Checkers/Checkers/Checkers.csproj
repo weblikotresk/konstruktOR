@@ -66,8 +66,12 @@
     </Compile>
     <Compile Include="ButtonStyles.cs" />
     <Compile Include="CellTtypes.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="Position.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="Combinations.cs" />
     <Compile Include="Gameboard.cs" />
-    <Compile Include="GridButton.cs" />
+    <Compile Include="Cell.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -7,11 +7,10 @@ using System.Windows.Controls;
 
 namespace Checkers
 {
-    public class GridButton
+    public class Cell
     {
-        public short Row;
-        public short Column;
-        public int Type; //CellTypes
+        public Position Position;
+        public CellTypes Type;
         public Button Content;
         public bool IsToAttack;
         //public bool IsActive;
