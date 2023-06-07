@@ -15,4 +15,6 @@ namespace Checkers
         BlackSupreme, //black + 3
         WhiteSupreme
     }
+
+
 }

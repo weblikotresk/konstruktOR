@@ -12,9 +12,9 @@ namespace Checkers
         public Position oldPos;
         public Position newPos;
         public int PiecesTaken;
-        public List<Position> PiecesMoved = new List<Position>();
+        public List<Position> PieceMovement = new List<Position>();
         public List<Position> PiecesTakenPos = new List<Position>();
-        public bool IsKinging;
+        public bool IsKingingMove;
         public bool IsEmpty;
 
         public Move(Position oldPosition, Position newPosition)
@@ -22,18 +22,19 @@ namespace Checkers
             oldPos= oldPosition; newPos=newPosition;
         }
 
-        public Move(List<Position> FrTo, List<Position> Taken, bool IsKingingMove)
+        public Move(List<Position> FrTo, List<Position> Taken, bool IsKinging)
         {
             oldPos = FrTo[0]; newPos = FrTo[1]; 
             foreach (Position pos in Taken)
             {
                 PiecesTakenPos.Add(pos);
             }
+            //????????below
             foreach (Position pos in FrTo)
             {
-                PiecesMoved.Add(pos);
+                PieceMovement.Add(pos);
             }
-            IsKinging = IsKingingMove;
+            IsKingingMove = IsKinging;
         }
 
         //when move is null
@@ -42,14 +43,42 @@ namespace Checkers
 
         }
         //deep move copy
+
+        public Move DeepCopyMove()
+        {
+            int NewPiecesTaken = PiecesTaken;
+            List<Position> NewPieceMovement = new List<Position>();
+            List<Position> NewPiecesTakenPos = new List<Position>();
+
+
+
+            foreach (Position pos in PieceMovement)
+            {
+                NewPieceMovement.Add(new Position(pos.Row, pos.Column));
+            }
+            foreach (Position pos in PiecesTakenPos)
+            {
+                NewPiecesTakenPos.Add(new Position(pos.Row, pos.Column));
+            }
+            Move NewMove = new Move()
+            {
+                oldPos = new Position(oldPos.Row, oldPos.Column),
+                newPos = new Position(newPos.Row, newPos.Column),
+                PiecesTaken = NewPiecesTaken,
+                PieceMovement = NewPieceMovement,
+                PiecesTakenPos = NewPiecesTakenPos
+
+            };
+            return NewMove;
+        }
         public Move(Move oldMove)
         {
             oldPos = oldMove.oldPos;
             newPos = oldMove.newPos;
             PiecesTaken = oldMove.PiecesTaken;
-            PiecesMoved = oldMove.PiecesMoved; //needed deep copy?
+            PieceMovement = oldMove.PieceMovement; //needed deep copy?
             PiecesTakenPos = oldMove.PiecesTakenPos; //needed deep copy?
-            IsKinging = oldMove.IsKinging;
+            IsKingingMove = oldMove.IsKingingMove;
         }
 
 

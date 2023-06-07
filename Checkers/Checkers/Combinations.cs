@@ -38,16 +38,11 @@ namespace Checkers
             InitialBoard.FindAllMoves();
 
             // Единственный в позиции ход делается без вычислений
-            if (InitialBoard.MoveList.Count == 1)
+            if (InitialBoard.GetMoveList().Count == 1)
             {
-                CurrentBestMove = InitialBoard.MoveList[0];
+                CurrentBestMove = InitialBoard.GetMoveList()[0];
                 return;
             }
-
-            //foreach(Move move in InitialBoard.MoveList)
-            //{
-
-            //}
 
             // Делаем копию доски, на которой будет проводить анализ
             // Это нужно, так как во время анализа мы будем передвигать фигуры
@@ -62,7 +57,7 @@ namespace Checkers
 
             // if the move hadn't been found after the search, it's being selected randomly out of the MoveList
             if (CurrentBestMove == new Move())
-                CurrentBestMove = boardCopy.MoveList[new System.Random().Next(0, boardCopy.MoveList.Count)];
+                CurrentBestMove = boardCopy.GetMoveList()[new System.Random().Next(0, boardCopy.GetMoveList().Count)];
         }
 
         // Функция минимакса с итеративным углублением: запускает минимакс со все большей и большей глубиной,
@@ -91,8 +86,6 @@ namespace Checkers
                     break;
             }
         }
-        int counter = 0;
-
         // Функция минимакса находит лучший ход в позиции за конкретного игрока
         // Возвращает сам ход, а также оценку позиции, которая получится, если этот ход сделать
         // depth показывает, на сколько еще итераций-рекурсий нам осталось углубиться (с каждым новым рекурсивным вызовом depth уменьшается)
@@ -126,19 +119,15 @@ namespace Checkers
             }
 
             // Если ход единственный
-            if (gameboard.MoveList.Count == 1)
+            if (gameboard.GetMoveList().Count == 1)
             {
-                Move move = gameboard.MoveList[0];
+                Move move = gameboard.GetMoveList()[0];
 
                 gameboard.MakeComputerMove(gameboard, move, memoriseMove: true);
 
-                //gameboard.OnMoveFinished(move);//??
-
                 float eval = Minimax(gameboard, depth, alpha, beta, !maximizingPlayer, timeLimit).Item1;
                 
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11здесь на выходе другая доска
                 gameboard.UnmakeLastMove();
-                //_transpositions.Add(new Transposition(PositionCache, eval, (int)Infinity, move));
                 return (eval, move);
             }
 
@@ -149,20 +138,18 @@ namespace Checkers
             {
                 float maxEval = (float)NInfinity;
                 // Проходимся по всем ходам
-                foreach (Move move in gameboard.MoveList)
+                foreach (Move move in gameboard.GetMoveList())
                 {
                     // Делаем его
 
-                    //в первый же заход поле уже изменено до 
                     gameboard.MakeComputerMove(gameboard, move, memoriseMove: true);
-                    //gameboard.OnMoveFinished(move);
-                    counter++;
+
                     // И запускаем минимакс из полученной позиции, но со стороны ПРОТИВНИКА
                     (float eval, Move compMove) = Minimax(gameboard, depth - 1, alpha, beta, false, timeLimit);
 
                     // Отменяем сделанный ход
 
-                    //gameboard.UnmakeLastMove();
+                    gameboard.UnmakeLastMove();
 
                     // Проверка, что минимакс со стороны противника не завершился экстренно из-за нехватки времени
                     if (compMove == null)
@@ -186,14 +173,14 @@ namespace Checkers
             else
             {
                 float minEval = (float)Infinity;
-                foreach (Move move in gameboard.MoveList)
+                foreach (Move move in gameboard.GetMoveList())
                 {
                     gameboard.MakeComputerMove(gameboard, move, memoriseMove: true);
                     //gameboard.OnMoveFinished(move);
 
                     (float eval, Move compMove) = Minimax(gameboard, depth - 1, alpha, beta, true, timeLimit);
 
-                    //gameboard.UnmakeLastMove();
+                    gameboard.UnmakeLastMove();
 
                     if (compMove == null)
                         return (0, null);

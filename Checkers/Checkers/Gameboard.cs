@@ -8,15 +8,18 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Image = System.Windows.Controls.Image;
 namespace Checkers
-{   //happy birthday, Mr. President.
-    public class Gameboard
+{ 
+    public class Gameboard 
     {
 
-        public List<Cell> CellList = new List<Cell>();
-        public List <Move> MoveList = new List<Move>();
+        private List<Cell> CellList = new List<Cell>();
+        private List <Move> MoveList = new List<Move>();
+        private List<Position> PiecesToBeEaten = new List<Position>();
 
-        public bool IsToAttack = false;//add multiple attacks simultaneously
+        public bool ContinuedWhiteAttack = false;
         public bool isWhitesTurn = true;
+
+
 
         public Cell ActiveCell = new Cell();
         public Move LastMove = new Move();
@@ -39,8 +42,8 @@ namespace Checkers
         { 1.0f, 1.0f, 1.0f, 1.0f },
             };
 
-        //private readonly float[] YBonus = new float[8]{ 1.0f, 1.025f, 1.05f, 1.075f, 1.1f, 1.125f, 1.15f, 1.175f}; // Y-бонус
-        private readonly float[] YBonus = new float[8] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f}; // Y-бонус
+        private readonly float[] YBonus = new float[8]{ 1.0f, 1.025f, 1.05f, 1.075f, 1.1f, 1.125f, 1.15f, 1.175f}; // Y-бонус
+        //private readonly float[] YBonus = new float[8] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f}; // Y-бонус
 
 
 
@@ -56,7 +59,7 @@ namespace Checkers
         {
             return CellList[pos1.Index].Type != CellList[pos2.Index].Type;
         }
-        public bool IsEmpty(Position pos) //????
+        public bool IsEmpty(Position pos)
         {
             return CellList[pos.Index].Type == CellTypes.Empty;
         }
@@ -75,7 +78,6 @@ namespace Checkers
                 CellList[move.newPos.Index].Content.Style = ButtonStyles.Instance.highlightedCellStyle;
                 SetType(move.newPos, CellTypes.Highlighted);
             }
-            
         }
 
         public void RenderImage(bool isBlack, int index, double width)
@@ -110,11 +112,16 @@ namespace Checkers
         // ----getters & setters----
         public CellTypes GetType(Position pos)
         {
-            return CellList[pos.Row * 8 + pos.Column].Type;
+            return CellList[pos.Index].Type;
         }
         public void SetType(Position pos, CellTypes type)
         {
             CellList[pos.Index].Type = type;
+        }
+
+        public List<Move> GetMoveList()
+        {
+            return MoveList;
         }
 
 
@@ -255,6 +262,7 @@ namespace Checkers
         {
             if (exc == null)
                 exc = new List<Position>();
+
             List<Move> moves = new List<Move>(); // все взятия
             List<Move> movesWithFollowingTake = new List<Move>(); // взятия, после которых можно побить еще
 
@@ -307,10 +315,8 @@ namespace Checkers
                         Position JumpOverPos = new Position(cell.Position.Row + x, cell.Position.Column + y);
 
                         if (IsInBounds(AttackPos) && IsEmpty(AttackPos) && !IsEmpty(JumpOverPos) && IsDifferentColor(cell.Position, JumpOverPos))
-                        {
+                        {//получившийся ход атаки рассмотрим подробнее, учитывая дальнейшие атаки подряд
                             AddMove(cell.Position, AttackPos, JumpOverPos);
-
-                            //AddMoveToList(MoveList, cell.Position, AttackPos);
                         }
                            
                     }
@@ -333,28 +339,21 @@ namespace Checkers
                     {
                         return false;
                     }
-                     
                 }
-                //if (exc.Contains(taken)) return false;
-
-
                 // Моделируем доску, на которой этот ход сделан
 
                 Gameboard nextBoard = DeepCopy();
 
                 Cell thisCell = MovePiece(nextBoard.CellList, fr, to, taken);
 
-                List<Position> newExc = new List<Position>(exc)
-                {
-                    taken
-                };
+                List<Position> newExc = new List<Position>(exc){taken};
 
                 // Проверяем, не превратилась ли наша шашка в дамку этим ходов
                 bool isThisMoveKinging = !((int)cell.Type > 3) && IsKinging(to, cell.Type == CellTypes.White);
 
                 List<Move> nextTakes = nextBoard.GetAllTakingMovesOfPiece(thisCell, newExc);
-
-                if (nextTakes.Count == 0)
+                
+                if (nextTakes.Count == 0) //если последующих взятий нет, заносим ход атаки в moves
                 {
                     moves.Add(new Move(new List<Position>() { fr, to }, new List<Position>() { taken }, isThisMoveKinging));
                     return false;
@@ -363,12 +362,12 @@ namespace Checkers
                 {
                     foreach (Move nextTake in nextTakes)
                     {
-                        List<Position> pos = nextTake.PiecesMoved;
+                        List<Position> pos = nextTake.PieceMovement;
                         pos.Insert(0, fr);
                         List<Position> takes = nextTake.PiecesTakenPos;
-                        takes.Add(taken);
-                        moves.Add(new Move(pos, takes, isThisMoveKinging || nextTake.IsKinging));
-                        movesWithFollowingTake.Add(new Move(pos, takes, isThisMoveKinging || nextTake.IsKinging));
+                        takes.Insert(0, taken);
+                        //создадим ход, в котором запишем все прошедшие шашкой клетки и все съеденные шашки
+                        movesWithFollowingTake.Add(new Move(pos, takes, isThisMoveKinging || nextTake.IsKingingMove));
                     }
                     return true;
                 }
@@ -378,29 +377,27 @@ namespace Checkers
         // Эта функция ищет все простые ходы шашки. Она очень простая и не представляет особого интереса
         private List<Move> GetAllSimpleMovesOfPiece(Cell cell)
         {
-            List<Move> moveList = new List<Move>();
+            List<Move> moves = new List<Move>();
             if (isWhitesTurn)
             {
                 //We're using ordinal directions relative to current piece position: NE, SE, SW, NW
                 Position NW = new Position(cell.Position.Row - 1, cell.Position.Column - 1);
                 Position NE = new Position(cell.Position.Row - 1, cell.Position.Column + 1);
 
-                AddMoveToList(moveList, cell.Position, NW);
-                AddMoveToList(moveList, cell.Position, NE);
+                AddMoveToList(moves, cell.Position, NW);
+                AddMoveToList(moves, cell.Position, NE);
             }
             else
             {
                 Position SW = new Position(cell.Position.Row + 1, cell.Position.Column - 1);
                 Position SE = new Position(cell.Position.Row + 1, cell.Position.Column + 1);
-                AddMoveToList(moveList, cell.Position, SW);
-                AddMoveToList(moveList, cell.Position, SE);
+                AddMoveToList(moves, cell.Position, SW);
+                AddMoveToList(moves, cell.Position, SE);
             }
 
-            return moveList;
+            return moves;
 
         }
-
-        
 
         private void AddMoveToList(List<Move> list, Position oldPos, Position newPos)
         {
@@ -410,24 +407,17 @@ namespace Checkers
             }
         }
 
-        
-
-        
 
         public void MakeComputerMove(Gameboard board, Move move, bool memoriseMove)
         {
             if (memoriseMove)
             {
                 board.LastMove = move;
-            }//проверка на просмотр того же хода необходима
+            }
             board.CellList[move.newPos.Index].Type = board.CellList[move.oldPos.Index].Type;
             board.CellList[move.oldPos.Index].Type = CellTypes.Empty;
         }
-        
-        //public void OnMoveFinished(Move move) //?????????????7
-        //{
 
-        //}
 
         public void UnmakeLastMove()
         {
@@ -435,25 +425,113 @@ namespace Checkers
             CellList[LastMove.newPos.Index].Type = CellTypes.Empty;
         }
 
+        //set IsToAttack to true to those cells that can attack
+        public bool PiecesToAttack(List<Move> moves)
+        {
+            bool AnyToAttack = false;
+            foreach (Move move in moves)
+            {
+                if (move.PiecesTakenPos.Count != 0)
+                {
+                    AnyToAttack = true;
+                    CellList[move.oldPos.Index].IsToAttack = true;
+                }
+            }
+            return AnyToAttack;
+        }
         
         public void MakeMoveOnBoard(Move move)
-        {   
-            RenderImage(CellList[move.oldPos.Index].Type, move.newPos, 40);
-            foreach (Cell cell in CellList)
+        {
+
+            if (move.PiecesTakenPos.Count !=0 && !isWhitesTurn)
             {
-                if(cell.Type == CellTypes.Highlighted) cell.Type = CellTypes.Empty;
+                //убирает все съеденные шашки
+                foreach (Position pos in move.PiecesTakenPos)
+                {
+                    RemovePiece(pos.Index);
+                }
+                //ставит бьющую шашку на последнее место
+                RenderImage(CellList[move.oldPos.Index].Type, move.PieceMovement.Last(), 40);
+                SetType(move.PieceMovement.Last(), CellList[move.oldPos.Index].Type);
+                RemovePiece(move.oldPos.Index);
+                
+            }else if (move.PiecesTakenPos.Count != 0 && isWhitesTurn)
+            {
+                //убирает первую съеденную шашку
+                RemovePiece(move.PiecesTakenPos[0].Index);
+                //уберём её из листа
+                move.PiecesTakenPos.Remove(move.PiecesTakenPos[0]);
+
+                //ставит бьющую шашку на первое из атакующих место
+                RenderImage(CellList[move.oldPos.Index].Type, move.PieceMovement[1], 40);
+                SetType(move.PieceMovement[1], CellList[move.oldPos.Index].Type);
+                RemovePiece(move.oldPos.Index);
+                //уберём исходную позицию из листа
+                move.PieceMovement.Remove(move.PieceMovement[0]);
+
+                //если есть ещё не побитые шашки, изменим ContinuedWhiteAttack
+                ContinuedWhiteAttack = move.PiecesTakenPos.Count != 0;
+            }
+            else
+            {
+                //обычный ход на пустую клетку
+                RenderImage(CellList[move.oldPos.Index].Type, move.newPos, 40);
+                SetType(move.newPos, CellList[move.oldPos.Index].Type);
+                RemovePiece(move.oldPos.Index);
+
+            }
+           foreach(Cell cell in CellList)
+            {
+                if(cell.Type == CellTypes.Highlighted)
+                {
+                    cell.Type = CellTypes.Empty;
+                }
             }
 
-            SetType(move.newPos, CellList[move.oldPos.Index].Type);
-            
+        }
+        public void RemoveIsToAttackFlags()
+        {
+            foreach(Cell cell in CellList)
+            {
+                if (cell.IsToAttack)
+                {
+                    cell.IsToAttack = false;
+                }
+            }
+        }
 
-            RemovePiece(move.oldPos.Index);
+        public void ComputersTurn(Gameboard gameboard)
+        {
+            Combinations computerCombos = new Combinations(gameboard.DeepCopy());
+            computerCombos.ActiveBestMoveSearch();
+            //CommitChangesToBoard();
+            MakeMoveOnBoard(computerCombos.CurrentBestMove);
+            isWhitesTurn = true;
+            //PlayersTurn();
+        }
 
-            if (IsToAttack) EatPiece(IndexToBeEaten);
+        public void PlayersTurn(Position clickedButtonPosition)
+        {
+            //проверим, есть ли атакующие ходы
+            FindAllMoves();
+            bool AnyToAttack = PiecesToAttack(MoveList);
+            //позволять ход только тем шашкам, что могут бить 
+            if(AnyToAttack)
+            {
+                if (CellList[clickedButtonPosition.Index].IsToAttack)
+                {
+                    HighlightMoves(FindAllMoves(clickedButtonPosition));
+                }
+                else
+                {
+                    MessageBox.Show("Gotta attack, dummy");
+                }
+            }//если обычный ход, просчитаем ходы и подсветим
+            else HighlightMoves(FindAllMoves(clickedButtonPosition));
+            RemoveIsToAttackFlags();
         }
 
 
-        
 
         public Grid CreateGrid()
         {
@@ -517,6 +595,7 @@ namespace Checkers
             {
                 //if button is highlighted
                 if (GetType(gridButton.Position) == CellTypes.Highlighted) gridButton.Content.Style = ButtonStyles.Instance.grayCellStyle;
+                //удалим непрозрачность
                 if (IsPieceClicked) gridButton.Content.Opacity = 1;
             }
         }
@@ -526,56 +605,54 @@ namespace Checkers
             Button clickedButton = (Button)sender;
             Position clickedButtonPos = new Position(Grid.GetRow(clickedButton), Grid.GetColumn(clickedButton));
 
-            bool IsPiececlicked = GetType(clickedButtonPos) == CellTypes.White; //accept only player's pieces click
+            bool IsPieceClicked = GetType(clickedButtonPos) == CellTypes.White; //accept only player's pieces click
 
-            if (IsPiececlicked) clickedButton.Style = ButtonStyles.Instance.clickedCellStyle;
+            if (IsPieceClicked) clickedButton.Style = ButtonStyles.Instance.clickedCellStyle;
 
-            //the player move
+            //MessageBox.Show(Convert.ToString(CellList));
+            //the player moves onto highlighted cell
             if (GetType(clickedButtonPos) == CellTypes.Highlighted)
             {
-                MakeMoveOnBoard(new Move()
+                
+                foreach(Move move in MoveList)
                 {
-                    oldPos = ActiveCell.Position,
-                    newPos = clickedButtonPos
+                    if(move.oldPos.Index == ActiveCell.Position.Index && move.newPos.Index == clickedButtonPos.Index)
+                    {
+                        MakeMoveOnBoard(move.DeepCopyMove());
+                    }
+                }
 
-                });
-                isWhitesTurn = false;
+                if (!ContinuedWhiteAttack)
+                {
+                    isWhitesTurn = false;
+                    //computer move
+                    //MessageBox.Show(Convert.ToString(CellList));
+                    ComputersTurn(this);
+                    
+                }
 
-                //computer time
-                Combinations computerCombos = new Combinations(this);
-                computerCombos.ActiveBestMoveSearch();//<-- влияет на отображение типов
-                MakeMoveOnBoard(computerCombos.CurrentBestMove);
-                //MakeMoveOnBoard(new Move()
-                //{
-                //    oldPos = new Position(2,1),
-                //    newPos=new Position(3,0)
-                //});
-                isWhitesTurn = true;
             }
 
             for (short i = 0; i < 8; i++)
             {
                 for (short j = 0; j < 8; j++)
                 {
+                    //очистим уже подсвеченные клетки
                     if (GetType(new Position(i,j)) == CellTypes.Highlighted) SetType(new Position(i, j), 0);
-
-                    if (IsPiececlicked)
+                    //включим непрозрачность поля
+                    if (IsPieceClicked)
                         CellList[i * 8 + j].Content.Opacity = (i != clickedButtonPos.Row || j != clickedButtonPos.Column) ? 0.65 : 1;
                 }
             }
 
-            if (IsPiececlicked && isWhitesTurn) HighlightMoves(FindAllMoves(clickedButtonPos));
+            //highlight moves for white player and find em all
+            if (IsPieceClicked && isWhitesTurn) PlayersTurn(clickedButtonPos);
         }
 
-        public void EatPiece(int index)
-        {
-            IsToAttack = false;
-            RemovePiece(index);
-        }
 
         // ----constructors----
-        public Gameboard()
-        {
+        public Gameboard(){
+        
         }
 
         //deep MOVES&CELL copy method
@@ -584,22 +661,41 @@ namespace Checkers
             bool newIsWhitesTurn = isWhitesTurn;
             List<Move> newMoveList = new List<Move>();
             List<Cell> newCellList = new List<Cell>();
+
             for(short i = 0; i < 8; i++)
             {
                 for(short j = 0; j < 8; j++)
                 {
-                    newCellList.Add(new Cell());
-                    newCellList[i * 8 + j] = CellList[i * 8 + j];
+                    newCellList.Add(new Cell()
+                    {
+                        Position = new Position(i, j),
+                        Type = (CellTypes)(int)CellList[i * 8 + j].Type
+                    });
                 }
             }
-            //foreach (Cell cell in CellList)
-            //{
-            //    newCellList.Add(cell);
-            //}
 
             foreach (Move move in MoveList)
             {
-                newMoveList.Add(move);
+                List<Position> newPiecesMoved = new List<Position>();
+                foreach(Position pos in move.PieceMovement)
+                {
+                    newPiecesMoved.Add(new Position(pos.Row, pos.Column));
+                }
+                List<Position> newPiecesTakenPos = new List<Position>();
+                foreach (Position pos in move.PiecesTakenPos)
+                {
+                    newPiecesTakenPos.Add(new Position(pos.Row, pos.Column));
+                }
+
+                newMoveList.Add(new Move()
+                {
+                    oldPos = new Position(move.oldPos.Row, move.oldPos.Column),
+                    newPos = new Position(move.newPos.Row, move.newPos.Column),
+                    PiecesTaken = move.PiecesTaken,
+                    PieceMovement = new List<Position>(newPiecesMoved),
+                    PiecesTakenPos = new List<Position>(newPiecesTakenPos),
+                    IsKingingMove = move.IsKingingMove
+                });
             }
 
             Gameboard gameboard = new Gameboard() {
