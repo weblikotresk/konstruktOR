@@ -9,17 +9,18 @@ namespace Checkers
 {
     public class Move
     {
-        public Position oldPos;
-        public Position newPos;
-        public int PiecesTaken;
+        public Position oldPos;//исходная позиция шашки
+        public Position newPos;//результирующая позиция шашки
         public List<Position> PieceMovement = new List<Position>();
         public List<Position> PiecesTakenPos = new List<Position>();
         public bool IsKingingMove;
-        public bool IsEmpty;
+        public Position TurningSupremePos;
 
-        public Move(Position oldPosition, Position newPosition)
+        public Move(Position oldPosition, Position newPosition, bool IsKinging, Position TurningSupreme)
         {
-            oldPos= oldPosition; newPos=newPosition;
+            oldPos= oldPosition; newPos=newPosition; 
+            IsKingingMove = IsKinging; TurningSupremePos = TurningSupreme;
+            PieceMovement = new List<Position>() {oldPos, newPos};
         }
 
         public Move(List<Position> FrTo, List<Position> Taken, bool IsKinging)
@@ -29,7 +30,7 @@ namespace Checkers
             {
                 PiecesTakenPos.Add(pos);
             }
-            //????????below
+            
             foreach (Position pos in FrTo)
             {
                 PieceMovement.Add(pos);
@@ -46,7 +47,6 @@ namespace Checkers
 
         public Move DeepCopyMove()
         {
-            int NewPiecesTaken = PiecesTaken;
             List<Position> NewPieceMovement = new List<Position>();
             List<Position> NewPiecesTakenPos = new List<Position>();
 
@@ -64,7 +64,6 @@ namespace Checkers
             {
                 oldPos = new Position(oldPos.Row, oldPos.Column),
                 newPos = new Position(newPos.Row, newPos.Column),
-                PiecesTaken = NewPiecesTaken,
                 PieceMovement = NewPieceMovement,
                 PiecesTakenPos = NewPiecesTakenPos
 
@@ -75,9 +74,8 @@ namespace Checkers
         {
             oldPos = oldMove.oldPos;
             newPos = oldMove.newPos;
-            PiecesTaken = oldMove.PiecesTaken;
-            PieceMovement = oldMove.PieceMovement; //needed deep copy?
-            PiecesTakenPos = oldMove.PiecesTakenPos; //needed deep copy?
+            PieceMovement = oldMove.PieceMovement;
+            PiecesTakenPos = oldMove.PiecesTakenPos;
             IsKingingMove = oldMove.IsKingingMove;
         }
 

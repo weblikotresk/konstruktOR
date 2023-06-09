@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Checkers
 {
-    public enum CellTypes
+    public enum CellTypes //типы клеток
     {
         Empty,
         Black,
         White,
         Highlighted,
         BlackSupreme, //black + 3
-        WhiteSupreme
+        WhiteSupreme  //white + 3
     }
 
 

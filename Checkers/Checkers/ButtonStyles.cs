@@ -19,20 +19,16 @@ namespace Checkers
         public Style clickedCellStyle { get; set; }
 
         public Style highlightedCellStyle { get; set; }
-        // public Style disabledCellStyle { get; set; }
 
 
         private ButtonStyles()
         {
             grayCellStyle = new Style();
             ControlTemplate templateButton = new ControlTemplate(typeof(Button));
-
-            //STARTS HERE <<-- have no idea why it works, but it does 
             FrameworkElementFactory elemFactory = new FrameworkElementFactory(typeof(Border));
             elemFactory.SetBinding(Border.BackgroundProperty, new Binding { RelativeSource = RelativeSource.TemplatedParent, Path = new PropertyPath("Background") });
             templateButton.VisualTree = elemFactory;
             elemFactory.AppendChild(new FrameworkElementFactory(typeof(ContentPresenter)));
-            //ENDS HERE
 
             grayCellStyle.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Gray });
             grayCellStyle.Setters.Add(new Setter { Property = Button.TemplateProperty, Value = templateButton });
@@ -49,12 +45,10 @@ namespace Checkers
             whiteCellStyle = new Style(typeof(Button));
             ControlTemplate whiteTemplateButton = new ControlTemplate(typeof(Button));
 
-            ////STARTS HERE <<-- have no idea why it works, but it does 
             FrameworkElementFactory whiteElemFactory = new FrameworkElementFactory(typeof(Border));
             whiteElemFactory.SetBinding(Border.BackgroundProperty, new Binding { RelativeSource = RelativeSource.TemplatedParent, Path = new PropertyPath("Background") });
             whiteTemplateButton.VisualTree = whiteElemFactory;
             whiteElemFactory.AppendChild(new FrameworkElementFactory(typeof(ContentPresenter)));
-            ////ENDS HERE
 
             whiteCellStyle.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.White });
             whiteCellStyle.Setters.Add(new Setter { Property = Button.TemplateProperty, Value = whiteTemplateButton });
@@ -66,13 +60,9 @@ namespace Checkers
             clickedCellStyle = new Style(typeof(Button), grayCellStyle);
             Trigger clickedStyleTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
             Trigger keyFocusStyleTrigger = new Trigger { Property = Button.IsKeyboardFocusedProperty, Value = true };
-            //Trigger focusStyleTrigger = new Trigger { Property = Button.IsFocusedProperty, Value = true };
 
-
-            //focusStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
             clickedStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
             keyFocusStyleTrigger.Setters.Add(new Setter { Property = Button.BackgroundProperty, Value = System.Windows.Media.Brushes.Red });
-
 
 
             clickedCellStyle.Triggers.Add(clickedStyleTrigger);
@@ -96,7 +86,7 @@ namespace Checkers
 
         }
 
-        public static ButtonStyles Instance
+        public static ButtonStyles Instance //создадим экземпляр, чтобы можно было обращаться к стилям без создания экземпляра через конструктор
         {
             get
             {

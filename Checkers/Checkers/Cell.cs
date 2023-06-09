@@ -9,11 +9,9 @@ namespace Checkers
 {
     public class Cell
     {
-        public Position Position;
-        public CellTypes Type;
-        public Button Content;
-        public bool IsToAttack;
-        //public bool IsActive;
-        //public bool IsToBeEaten;
+        public Position Position; //позиция клетки
+        public CellTypes Type; //тип клетки
+        public Button Content;//наполнение клетки - кнопка
+        public bool IsToAttack;//флаг атаки
     }
 }

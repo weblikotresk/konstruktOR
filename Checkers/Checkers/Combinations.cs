@@ -13,20 +13,20 @@ namespace Checkers
     //используем минимакс с альфа-бета отсечением и deepening search (insurance policy)
     public class Combinations
     {
-        public Move CurrentBestMove;
-        public Gameboard InitialBoard;
-        public DateTime SearchStartTime;
-        //public DateTime SearchEndTime = new DateTime().AddSeconds(1);
-        public int ActiveSearchDepth=5;
-        double Infinity = double.MaxValue;
-        double NInfinity = double.MinValue;
+        public Move CurrentBestMove; // лучший ход чёрных, который мы вернём в Gameboard.cs
+        public Gameboard InitialBoard;//глубокая копия доски
+        public DateTime SearchStartTime;//время начала поиска
+        public float SearchEndTime = 10000;//верхняя граница времени поиска
+        public int ActiveSearchDepth=6;//нижняя граница допустимой глубины
+        double Infinity = double.MaxValue;//исходное значение alpha
+        double NInfinity = double.MinValue;//исходное значение beta
 
         public Combinations(Gameboard initBoard)
         {
             InitialBoard = initBoard;
         }
 
-        // Функция активного поиска хода запускает поиск лучшего ход в позиции
+        // Функция активного поиска хода запускает поиск лучшего хода в позиции
 
         //entry point - ActiveBestMoveSearch
         public void ActiveBestMoveSearch()
@@ -34,13 +34,13 @@ namespace Checkers
             int depth = 0, startDepth = 2;
             CurrentBestMove = new Move();
 
-            //find all possible black moves for the initial board
+            //найти все возможные ходы для чёрной стороны
             InitialBoard.FindAllMoves();
 
             // Единственный в позиции ход делается без вычислений
-            if (InitialBoard.GetMoveList().Count == 1)
+            if (InitialBoard.MoveList.Count == 1)
             {
-                CurrentBestMove = InitialBoard.GetMoveList()[0];
+                CurrentBestMove = InitialBoard.MoveList[0];
                 return;
             }
 
@@ -49,20 +49,18 @@ namespace Checkers
             Gameboard boardCopy = InitialBoard.DeepCopy();
             SearchStartTime = DateTime.Now;
 
-
-
             
             // entry point to computing moves
-            IterativeDeepeningMinimax(boardCopy, 10000, startDepth, ActiveSearchDepth, ref CurrentBestMove, ref depth, true);
+            IterativeDeepeningMinimax(boardCopy, 10000, startDepth, ActiveSearchDepth, ref CurrentBestMove, ref depth);
 
             // if the move hadn't been found after the search, it's being selected randomly out of the MoveList
             if (CurrentBestMove == new Move())
-                CurrentBestMove = boardCopy.GetMoveList()[new System.Random().Next(0, boardCopy.GetMoveList().Count)];
+                CurrentBestMove = boardCopy.MoveList[new System.Random().Next(0, boardCopy.MoveList.Count)];
         }
 
         // Функция минимакса с итеративным углублением: запускает минимакс со все большей и большей глубиной,
         // при этом следя за ограничением во времени
-        public void IterativeDeepeningMinimax(Gameboard board, float timeLimit, int minDepth, int maxDepth, ref Move bestMove, ref int depth, bool isWhileActiveSearch)
+        public void IterativeDeepeningMinimax(Gameboard board, float timeLimit, int minDepth, int maxDepth, ref Move bestMove, ref int depth)
         {
             
             for (depth = minDepth; depth <= maxDepth; depth++)
@@ -90,7 +88,7 @@ namespace Checkers
         // Возвращает сам ход, а также оценку позиции, которая получится, если этот ход сделать
         // depth показывает, на сколько еще итераций-рекурсий нам осталось углубиться (с каждым новым рекурсивным вызовом depth уменьшается)
         // maximizingPlayer показывает, за какого игрока мы ищем лучший ход, т.е. позицию для какого игрока мы пытаемся улучшить
-        public (float, Move) Minimax(Gameboard gameboard, int depth, float alpha, float beta, bool maximizingPlayer, float timeLimit) //проблема здесь!
+        public (float, Move) Minimax(Gameboard gameboard, int depth, float alpha, float beta, bool maximizingPlayer, float timeLimit) 
         {
             gameboard.isWhitesTurn = maximizingPlayer;
             gameboard.FindAllMoves();
@@ -100,11 +98,11 @@ namespace Checkers
             
             // Проверяем нынешнее состояние игры
             GameState state = gameboard.GetGameState();
-            if (state != GameState.IN_PROCESS)
+            if (state != GameState.InProgress)
             {
-                if (state == GameState.WHITE_WIN)
+                if (state == GameState.WhiteWon)
                     return ((float)Infinity + depth, new Move());
-                if (state == GameState.BLACK_WIN)
+                if (state == GameState.BlackWon)
                     return ((float)NInfinity - depth, new Move());
                 else
                     return (0, new Move());
@@ -119,9 +117,9 @@ namespace Checkers
             }
 
             // Если ход единственный
-            if (gameboard.GetMoveList().Count == 1)
+            if (gameboard.MoveList.Count == 1)
             {
-                Move move = gameboard.GetMoveList()[0];
+                Move move = gameboard.MoveList[0];
 
                 gameboard.MakeComputerMove(gameboard, move, memoriseMove: true);
 
@@ -138,17 +136,15 @@ namespace Checkers
             {
                 float maxEval = (float)NInfinity;
                 // Проходимся по всем ходам
-                foreach (Move move in gameboard.GetMoveList())
+                foreach (Move move in gameboard.MoveList)
                 {
                     // Делаем его
-
                     gameboard.MakeComputerMove(gameboard, move, memoriseMove: true);
 
                     // И запускаем минимакс из полученной позиции, но со стороны ПРОТИВНИКА
                     (float eval, Move compMove) = Minimax(gameboard, depth - 1, alpha, beta, false, timeLimit);
 
                     // Отменяем сделанный ход
-
                     gameboard.UnmakeLastMove();
 
                     // Проверка, что минимакс со стороны противника не завершился экстренно из-за нехватки времени
@@ -173,7 +169,7 @@ namespace Checkers
             else
             {
                 float minEval = (float)Infinity;
-                foreach (Move move in gameboard.GetMoveList())
+                foreach (Move move in gameboard.MoveList)
                 {
                     gameboard.MakeComputerMove(gameboard, move, memoriseMove: true);
                     //gameboard.OnMoveFinished(move);
